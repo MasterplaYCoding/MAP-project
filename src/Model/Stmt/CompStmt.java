@@ -15,7 +15,7 @@ public class CompStmt implements IStmt {
 
     @Override
     public String toString() {
-        return "(" +  first.toString() + ", " + second.toString() + ")";
+        return first.toString() + ", " + second.toString();
     }
 
     @Override
@@ -26,4 +26,11 @@ public class CompStmt implements IStmt {
         return state;
     }
 
+    public IStmt getFirst() {
+        return first;
+    }
+
+    public IStmt getSecond() {
+        return second;
+    }
 }

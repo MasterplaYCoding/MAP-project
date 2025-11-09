@@ -26,4 +26,9 @@ public class BoolValue implements Value {
         return new BoolType();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        return  o instanceof BoolValue && ((BoolValue) o).getVal() == val;
+    }
+
 }

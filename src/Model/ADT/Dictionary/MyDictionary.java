@@ -5,6 +5,7 @@ import Model.Exception.MyException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class MyDictionary<T1, T2> implements MyIDictionary<T1, T2> {
 
@@ -65,5 +66,19 @@ public class MyDictionary<T1, T2> implements MyIDictionary<T1, T2> {
     @Override
     public String toString(){
         return map.toString();
+    }
+
+    @Override
+    public String fileToString(){
+        StringBuilder sb = new StringBuilder("SymTable:\n");
+        for (Map.Entry<T1, T2> entry : map.entrySet()){
+            sb.append(entry.getKey()).append(" --> ").append(entry.getValue().toString()).append("\n");
+        }
+        return sb.toString();
+    }
+
+    @Override
+    public Set<T1> keySet() {
+        return map.keySet();
     }
 }

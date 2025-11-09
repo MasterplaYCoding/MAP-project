@@ -33,10 +33,7 @@ public class VarDeclStmt implements  IStmt {
 
         if(symTbl.isDefined(name)) throw new VariableAlreadyDeclared();
         if(typ ==  null) throw new ValueTypeError("Type is null");
-        if(typ.equals(new IntType()))
-            symTbl.put(name, new IntValue(0));
-        else
-            symTbl.put(name, new BoolValue(false));
+        symTbl.put(name, typ.defaultValue());
         return state;
     }
 

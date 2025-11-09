@@ -8,4 +8,5 @@ public interface MyIStack<T> {
     void push(T value);
     boolean isEmpty();
     int size();
+    String fileToString();
 }

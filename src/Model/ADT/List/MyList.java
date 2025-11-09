@@ -73,4 +73,13 @@ public class MyList<T> implements MyIList<T> {
             throw new EmptyListException();
         return vector.lastElement();
     }
+
+    @Override
+    public String fileToString() {
+        StringBuilder sb = new StringBuilder("Out:\n");
+        for (T t : vector) {
+            sb.append(t.toString()).append('\n');
+        }
+        return sb.toString();
+    }
 }

@@ -8,12 +8,16 @@ import Model.ADT.Stack.MyIStack;
 import Model.ADT.Stack.MyStack;
 import Model.Exception.MyException;
 import Model.Stmt.IStmt;
+import Model.Value.StringValue;
 import Model.Value.Value;
+
+import java.io.BufferedReader;
 
 public class PrgState {
     private MyIStack<IStmt> exeStack;
     private MyIDictionary<String, Value> symTable;
     private MyIList<Value> out;
+    private MyIDictionary<StringValue, BufferedReader> FileTable;
 
     IStmt originalProgram;
 
@@ -21,6 +25,7 @@ public class PrgState {
         exeStack = new MyStack<IStmt>();
         symTable = new MyDictionary<String, Value>();
         out = new MyList<Value>();
+        FileTable = new MyDictionary<StringValue, BufferedReader>();
     }
 
     public PrgState(PrgState state) {
@@ -28,14 +33,25 @@ public class PrgState {
         this.originalProgram = state.originalProgram;
         this.exeStack = state.exeStack;
         this.out = state.out;
+        this.FileTable = state.FileTable;
     }
 
-    public PrgState(MyIStack<IStmt> stk, MyIDictionary<String, Value> symtbl, MyIList<Value> ot, IStmt prg) {
+    public PrgState(MyIStack<IStmt> stk, MyIDictionary<String, Value> symtbl, MyIList<Value> ot, IStmt prg, MyIDictionary<StringValue, BufferedReader> FileTable) {
         exeStack = stk;
         symTable = symtbl;
         out = ot;
         originalProgram = prg;
+        this.FileTable = FileTable;
         stk.push(prg);
+    }
+
+    public PrgState(IStmt prg) {
+        exeStack = new MyStack<IStmt>();
+        symTable = new MyDictionary<String, Value>();
+        out = new MyList<Value>();
+        originalProgram = prg;
+        exeStack.push(prg);
+        FileTable = new MyDictionary<StringValue, BufferedReader>();
     }
 
     public MyIStack<IStmt> getExeStack() {
@@ -54,6 +70,10 @@ public class PrgState {
         return originalProgram;
     }
 
+    public MyIDictionary<StringValue, BufferedReader> getFileTable() {
+        return FileTable;
+    }
+
     public void setExeStack(MyIStack<IStmt> exeStack) {
         this.exeStack = exeStack;
     }
@@ -70,6 +90,10 @@ public class PrgState {
         this.originalProgram = originalProgram;
     }
 
+    public void setFileTable(MyIDictionary<StringValue, BufferedReader> FileTable) {
+        this.FileTable = FileTable;
+    }
+
     @Override
     public String toString() {
         String str = "";
@@ -77,5 +101,13 @@ public class PrgState {
         str += "Sym table : " + symTable.toString() + "\n";
         str += "Out : " + out.toString() + "\n";
         return str;
+    }
+
+    public String fileToString() {
+        StringBuilder str = new StringBuilder(exeStack.fileToString() + '\n' + symTable.fileToString() + out.fileToString() + "\nFileTable:\n");
+        for (StringValue key : FileTable.keySet()) {
+            str.append(key.getValue()).append("\n");
+        }
+        return  str.toString();
     }
 }

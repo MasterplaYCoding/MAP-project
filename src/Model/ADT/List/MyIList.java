@@ -12,4 +12,5 @@ public interface MyIList<T> {
     T get(int index) throws MyException;
     T getFirst() throws MyException;
     T getLast() throws MyException;
+    String fileToString();
 }

@@ -24,4 +24,10 @@ public class IntValue implements Value {
     public Type getType() {
         return new IntType();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return  o instanceof IntValue && ((IntValue) o).getVal() == val;
+    }
+
 }

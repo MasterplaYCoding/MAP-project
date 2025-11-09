@@ -3,6 +3,8 @@ package Model.ADT.Stack;
 
 import Model.Exception.ADTExceptions.EmptyStackException;
 import Model.Exception.MyException;
+import Model.Stmt.CompStmt;
+import Model.Stmt.IStmt;
 
 import java.util.Stack;
 
@@ -49,5 +51,26 @@ public class MyStack<T> implements MyIStack<T> {
     @Override
     public String toString() {
         return stack.toString();
+    }
+
+    @Override
+    public String fileToString() {
+        Stack<IStmt> newStack = (Stack<IStmt>) stack.clone();
+        MyStack<IStmt> copie = new MyStack<>(newStack);
+
+        StringBuilder result = new StringBuilder("Exe stack:\n");
+        while (!copie.isEmpty()) {
+            IStmt st = copie.pop();
+            if(st instanceof CompStmt) {
+                IStmt first = ((CompStmt) st).getFirst();
+                IStmt second = ((CompStmt) st).getSecond();
+                copie.push(second);
+                copie.push(first);
+            }
+            else {
+                result.append(st.toString()).append("\n");
+            }
+        }
+        return result.toString();
     }
 }

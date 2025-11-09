@@ -31,10 +31,12 @@ public class Controller implements IController {
     @Override
     public void allStep() throws MyException {
         PrgState prg = repository.getCrtPrg();
-        displayState();
+        // displayState();
+        repository.logPrgStateExec();
         while (!prg.getExeStack().isEmpty()){
             oneStep(prg);
-            displayState();
+            // displayState();
+            repository.logPrgStateExec();
         }
     }
 
