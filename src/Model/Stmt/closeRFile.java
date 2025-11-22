@@ -6,6 +6,7 @@ import Model.Exception.ExpressionsEvaluation.ValueTypeError;
 import Model.Exception.FilesExepctions.FileException;
 import Model.Exception.MyException;
 import Model.Expression.Exp;
+import Model.Heap.MyIHeap;
 import Model.Other.PrgState;
 import Model.Type.StringType;
 import Model.Value.StringValue;
@@ -27,10 +28,11 @@ public class closeRFile implements IStmt{
 
         MyIDictionary<String, Value> symTbl = prgState.getSymTable();
         MyIDictionary<StringValue, BufferedReader> fileTable = prgState.getFileTable();
+        MyIHeap<Integer, Value> heap =  prgState.getHeap();
 
         StringValue val = (StringValue) new StringType().defaultValue();
         try {
-            val = (StringValue) exp.eval(symTbl);
+            val = (StringValue) exp.eval(symTbl, heap);
         }
         catch (Exception e) {
             throw new ValueTypeError("Expression is not of type String");

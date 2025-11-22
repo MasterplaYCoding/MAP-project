@@ -6,6 +6,7 @@ import Model.Exception.ExpressionsEvaluation.ValueTypeError;
 import Model.Exception.FilesExepctions.FileException;
 import Model.Exception.MyException;
 import Model.Expression.Exp;
+import Model.Heap.MyIHeap;
 import Model.Other.PrgState;
 import Model.Type.IntType;
 import Model.Type.StringType;
@@ -32,6 +33,7 @@ public class readFile implements IStmt{
 
         MyIDictionary<String, Value> symTable = prgState.getSymTable();
         MyIDictionary<StringValue, BufferedReader> fileTable = prgState.getFileTable();
+        MyIHeap<Integer, Value> heap =  prgState.getHeap();
 
         if(!symTable.isDefined(var_name))
             throw new KeyDoesntExist("Variable "+var_name+" is not defined");
@@ -41,7 +43,7 @@ public class readFile implements IStmt{
 
         StringValue val = (StringValue) new StringType().defaultValue();
         try {
-            val = (StringValue) exp.eval(symTable);
+            val = (StringValue) exp.eval(symTable, heap);
         }
         catch (Exception e) {
             throw new ValueTypeError("Exp should evaluate to StringValue");

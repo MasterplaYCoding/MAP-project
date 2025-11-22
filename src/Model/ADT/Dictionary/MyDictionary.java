@@ -2,10 +2,9 @@ package Model.ADT.Dictionary;
 
 import Model.Exception.ADTExceptions.NullKeyException;
 import Model.Exception.MyException;
+import Model.Value.StringValue;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class MyDictionary<T1, T2> implements MyIDictionary<T1, T2> {
 
@@ -78,7 +77,18 @@ public class MyDictionary<T1, T2> implements MyIDictionary<T1, T2> {
     }
 
     @Override
+    public Map<T1, T2> getContent() {
+        return map;
+    }
+
+    @Override
     public Set<T1> keySet() {
         return map.keySet();
     }
+
+    @Override
+    public Collection<T2> values() {
+        return map.values();
+    }
+
 }

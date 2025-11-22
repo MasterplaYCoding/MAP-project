@@ -27,6 +27,11 @@ public class BoolValue implements Value {
     }
 
     @Override
+    public Value deepCopy() {
+        return new BoolValue(val);
+    }
+
+    @Override
     public boolean equals(Object o) {
         return  o instanceof BoolValue && ((BoolValue) o).getVal() == val;
     }

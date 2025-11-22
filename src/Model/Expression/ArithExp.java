@@ -5,6 +5,7 @@ import Model.Exception.ADTExceptions.NullKeyException;
 import Model.Exception.ExpressionsEvaluation.DivisionByZeroException;
 import Model.Exception.ExpressionsEvaluation.ValueTypeError;
 import Model.Exception.MyException;
+import Model.Heap.MyIHeap;
 import Model.Type.IntType;
 import Model.Value.IntValue;
 import Model.Value.Value;
@@ -26,11 +27,11 @@ public class ArithExp implements Exp {
     }
 
     @Override
-    public Value eval(MyIDictionary<String, Value> tbl) throws MyException {
+    public Value eval(MyIDictionary<String, Value> tbl, MyIHeap<Integer, Value> heap) throws MyException {
         Value v1,v2;
-        v1 = e1.eval(tbl);
+        v1 = e1.eval(tbl, heap);
         if(v1.getType().equals(new IntType())){
-            v2 =  e2.eval(tbl);
+            v2 =  e2.eval(tbl, heap);
             if(v2.getType().equals(new IntType())){
                 IntValue i1 = (IntValue) v1;
                 IntValue i2 = (IntValue) v2;

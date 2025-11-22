@@ -8,6 +8,7 @@ import Model.Exception.ExpressionsEvaluation.ValueTypeError;
 import Model.Exception.ExpressionsEvaluation.VariableNotDefinedException;
 import Model.Exception.MyException;
 import Model.Expression.Exp;
+import Model.Heap.MyIHeap;
 import Model.Other.PrgState;
 import Model.Type.Type;
 import Model.Value.Value;
@@ -32,9 +33,10 @@ public class AssignStmt implements IStmt {
     public PrgState execute(PrgState state) throws MyException {
         MyIStack<IStmt> stk = state.getExeStack();
         MyIDictionary<String, Value> symTbl = state.getSymTable();
+        MyIHeap<Integer, Value> heap =  state.getHeap();
 
         if (symTbl.isDefined(id)) {
-            Value val = exp.eval(symTbl);
+            Value val = exp.eval(symTbl, heap);
             Type typId = (symTbl.get(id)).getType();
             if ((val.getType()).equals(typId))
                 symTbl.update(id, val);

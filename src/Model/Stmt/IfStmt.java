@@ -6,6 +6,7 @@ import Model.Exception.ADTExceptions.NullKeyException;
 import Model.Exception.ExpressionsEvaluation.ValueTypeError;
 import Model.Exception.MyException;
 import Model.Expression.Exp;
+import Model.Heap.MyIHeap;
 import Model.Other.PrgState;
 import Model.Type.BoolType;
 import Model.Value.BoolValue;
@@ -34,7 +35,8 @@ public class IfStmt implements IStmt {
     public PrgState execute(PrgState state) throws MyException {
         MyIStack<IStmt> stk = state.getExeStack();
         MyIDictionary<String, Value> symTbl = state.getSymTable();
-        Value val = exp.eval(symTbl);
+        MyIHeap<Integer, Value> heap =  state.getHeap();
+        Value val = exp.eval(symTbl, heap);
         if(!Objects.equals(val.getType(), new BoolType()))
             throw new ValueTypeError("Conditional expression is not a boolean");
         BoolValue Cond = (BoolValue)val;

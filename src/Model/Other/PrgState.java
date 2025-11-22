@@ -6,7 +6,8 @@ import Model.ADT.List.MyIList;
 import Model.ADT.List.MyList;
 import Model.ADT.Stack.MyIStack;
 import Model.ADT.Stack.MyStack;
-import Model.Exception.MyException;
+import Model.Heap.MyHeap;
+import Model.Heap.MyIHeap;
 import Model.Stmt.IStmt;
 import Model.Value.StringValue;
 import Model.Value.Value;
@@ -18,14 +19,16 @@ public class PrgState {
     private MyIDictionary<String, Value> symTable;
     private MyIList<Value> out;
     private MyIDictionary<StringValue, BufferedReader> FileTable;
+    private MyIHeap<Integer, Value> heap;
 
     IStmt originalProgram;
 
     public PrgState() {
-        exeStack = new MyStack<IStmt>();
-        symTable = new MyDictionary<String, Value>();
-        out = new MyList<Value>();
-        FileTable = new MyDictionary<StringValue, BufferedReader>();
+        exeStack = new MyStack<>();
+        symTable = new MyDictionary<>();
+        out = new MyList<>();
+        FileTable = new MyDictionary<>();
+        heap = new MyHeap<>();
     }
 
     public PrgState(PrgState state) {
@@ -34,6 +37,7 @@ public class PrgState {
         this.exeStack = state.exeStack;
         this.out = state.out;
         this.FileTable = state.FileTable;
+        this.heap = state.heap;
     }
 
     public PrgState(MyIStack<IStmt> stk, MyIDictionary<String, Value> symtbl, MyIList<Value> ot, IStmt prg, MyIDictionary<StringValue, BufferedReader> FileTable) {
@@ -52,6 +56,7 @@ public class PrgState {
         originalProgram = prg;
         exeStack.push(prg);
         FileTable = new MyDictionary<StringValue, BufferedReader>();
+        heap = new MyHeap<>();
     }
 
     public MyIStack<IStmt> getExeStack() {
@@ -94,6 +99,14 @@ public class PrgState {
         this.FileTable = FileTable;
     }
 
+    public MyIHeap<Integer, Value> getHeap() {
+        return heap;
+    }
+
+    public void setHeap(MyIHeap<Integer, Value> heap) {
+        this.heap = heap;
+    }
+
     @Override
     public String toString() {
         String str = "";
@@ -108,6 +121,7 @@ public class PrgState {
         for (StringValue key : FileTable.keySet()) {
             str.append(key.getValue()).append("\n");
         }
+        str.append(heap.toString()).append("\n");
         return  str.toString();
     }
 }

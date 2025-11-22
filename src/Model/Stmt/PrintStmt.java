@@ -6,6 +6,7 @@ import Model.ADT.Stack.MyIStack;
 import Model.Exception.ADTExceptions.NullKeyException;
 import Model.Exception.MyException;
 import Model.Expression.Exp;
+import Model.Heap.MyIHeap;
 import Model.Other.PrgState;
 import Model.Value.Value;
 
@@ -25,7 +26,8 @@ public class PrintStmt implements IStmt{
     public PrgState execute(PrgState state) throws MyException {
         MyIList<Value> out = state.getOut();
         MyIDictionary<String, Value> symTable =  state.getSymTable();
-        out.add(exp.eval(symTable));
+        MyIHeap<Integer, Value> heap =  state.getHeap();
+        out.add(exp.eval(symTable, heap));
         return state;
     }
 }

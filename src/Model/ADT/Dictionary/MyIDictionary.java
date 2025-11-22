@@ -1,8 +1,11 @@
 package Model.ADT.Dictionary;
 
-import Model.Exception.ADTExceptions.NullKeyException;
 import Model.Exception.MyException;
+import Model.Value.StringValue;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public interface MyIDictionary<T1, T2> {
@@ -14,5 +17,7 @@ public interface MyIDictionary<T1, T2> {
     boolean isDefined(T1 id) throws MyException;
     void update(T1 id, T2 val) throws MyException;
     String fileToString();
+    Map<T1,T2> getContent();
     Set<T1> keySet();
+    Collection<T2> values();
 }

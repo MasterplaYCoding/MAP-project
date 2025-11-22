@@ -6,6 +6,7 @@ import Model.Exception.ExpressionsEvaluation.ValueTypeError;
 import Model.Exception.FilesExepctions.FileException;
 import Model.Exception.MyException;
 import Model.Expression.Exp;
+import Model.Heap.MyIHeap;
 import Model.Other.PrgState;
 import Model.Type.StringType;
 import Model.Value.StringValue;
@@ -30,9 +31,10 @@ public class openRFile implements IStmt {
     public PrgState execute(PrgState prgState) throws MyException {
         MyIDictionary<String, Value> tbl = prgState.getSymTable();
         MyIDictionary<StringValue, BufferedReader> fileTable = prgState.getFileTable();
-        if(!exp.eval(tbl).getType().equals(new StringType()))
+        MyIHeap<Integer, Value> heap =  prgState.getHeap();
+        if(!exp.eval(tbl, heap).getType().equals(new StringType()))
             throw new ValueTypeError("Wrong expression type");
-        StringValue fileName = (StringValue) exp.eval(tbl);
+        StringValue fileName = (StringValue) exp.eval(tbl, heap);
         if(fileTable.isDefined(fileName))
             throw new KeyAlreadyExists();
         try {

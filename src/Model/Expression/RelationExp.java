@@ -4,6 +4,7 @@ import Model.ADT.Dictionary.MyIDictionary;
 import Model.Exception.ExpressionsEvaluation.DivisionByZeroException;
 import Model.Exception.ExpressionsEvaluation.ValueTypeError;
 import Model.Exception.MyException;
+import Model.Heap.MyIHeap;
 import Model.Type.IntType;
 import Model.Value.BoolValue;
 import Model.Value.IntValue;
@@ -21,10 +22,18 @@ public class RelationExp implements Exp {
     // 5 - >
     // 6 - >=
 
-    public RelationExp(Exp ex1, Exp ex2,  int relation) {
+    public RelationExp(Exp ex1, Exp ex2, String relation) {
         this.ex1 = ex1;
         this.ex2 = ex2;
-        this.relation = relation;
+        switch (relation) {
+            case "<" -> this.relation = 1;
+            case "<=" -> this.relation = 2;
+            case "==" -> this.relation = 3;
+            case "!=" -> this.relation = 4;
+            case ">" -> this.relation = 5;
+            case ">=" -> this.relation = 6;
+            default -> this.relation = 0;
+        }
     }
 
     public Exp getEx1() {
@@ -51,11 +60,11 @@ public class RelationExp implements Exp {
     }
 
     @Override
-    public Value eval(MyIDictionary<String, Value> tbl) throws MyException {
+    public Value eval(MyIDictionary<String, Value> tbl, MyIHeap<Integer, Value> heap) throws MyException {
         Value v1,v2;
-        v1 = ex1.eval(tbl);
+        v1 = ex1.eval(tbl, heap);
         if(v1.getType().equals(new IntType())){
-            v2 =  ex2.eval(tbl);
+            v2 =  ex2.eval(tbl, heap);
             if(v2.getType().equals(new IntType())){
                 IntValue i1 = (IntValue) v1;
                 IntValue i2 = (IntValue) v2;

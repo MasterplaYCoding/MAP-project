@@ -1,7 +1,7 @@
 package View.Command;
 
 import Model.Exception.MyException;
-import ViewModel.Controller;
+import Service.Controller;
 
 public class RunExample extends Command {
     private Controller ctr;
