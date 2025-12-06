@@ -1,5 +1,7 @@
 package View.Command;
 
+import Model.Exception.MyException;
+
 public abstract class Command {
     private String key, description;
     public Command(String key, String description) { this.key = key; this.description = description;}

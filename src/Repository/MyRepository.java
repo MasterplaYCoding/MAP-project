@@ -8,6 +8,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 public class MyRepository implements IRepository {
 
@@ -39,21 +40,26 @@ public class MyRepository implements IRepository {
     }
 
     @Override
-    public PrgState getCrtPrg() throws MyException {
-        return states.getLast();
-    }
-
-    @Override
-    public void logPrgStateExec() throws MyException {
+    public void logPrgStateExec(PrgState state) throws MyException {
         PrintWriter logFile = null;
         try {
             logFile = new PrintWriter(new BufferedWriter(new FileWriter(logFilePath, true)));
-            logFile.println(states.getLast().fileToString());
+            logFile.println(state.fileToString());
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             if (logFile != null)
                 logFile.close();
         }
+    }
+
+    @Override
+    public List<PrgState> getPrgList() {
+        return states.getList();
+    }
+
+    @Override
+    public void setPrgList(List<PrgState> prgList) {
+        states.setList(prgList);
     }
 }

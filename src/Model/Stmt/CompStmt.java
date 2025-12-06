@@ -23,7 +23,12 @@ public class CompStmt implements IStmt {
         MyIStack<IStmt> stk = state.getExeStack();
         stk.push(second);
         stk.push(first);
-        return state;
+        return null;
+    }
+
+    @Override
+    public IStmt deepcopy() {
+        return new CompStmt(this.first.deepcopy(), this.second.deepcopy());
     }
 
     public IStmt getFirst() {

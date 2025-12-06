@@ -43,7 +43,12 @@ public class openRFile implements IStmt {
         } catch (IOException e) {
             throw new FileException("OpenRFile: cannot open file '" + fileName + "': " + e.getMessage());
         }
-        return prgState;
+        return null;
+    }
+
+    @Override
+    public IStmt deepcopy() {
+        return new openRFile(this.exp.deepcopy());
     }
 
     @Override

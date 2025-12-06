@@ -13,7 +13,7 @@ public class RunExample extends Command {
     public void execute() {
         try{
             ctr.allStep();  }
-        catch (MyException e)  {
+        catch (Exception e)  {
             System.out.println(e.getMessage());
         }
     }

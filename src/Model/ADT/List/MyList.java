@@ -1,5 +1,6 @@
 package Model.ADT.List;
 
+import java.util.List;
 import java.util.Vector;
 
 import Model.Exception.ADTExceptions.EmptyListException;
@@ -81,5 +82,16 @@ public class MyList<T> implements MyIList<T> {
             sb.append(t.toString()).append('\n');
         }
         return sb.toString();
+    }
+
+    @Override
+    public List<T> getList() throws MyException {
+        return  vector;
+    }
+
+    @Override
+    public void setList(List<T> list) throws MyException {
+        vector.clear();
+        vector.addAll(list);
     }
 }

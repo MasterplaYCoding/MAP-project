@@ -63,7 +63,12 @@ public class readFile implements IStmt{
         catch (IOException e) {
             throw new FileException("Something went wrong");
         }
-        return prgState;
+        return null;
+    }
+
+    @Override
+    public IStmt deepcopy() {
+        return new readFile(this.exp.deepcopy(),  this.var_name);
     }
 
     @Override

@@ -91,4 +91,10 @@ public class MyDictionary<T1, T2> implements MyIDictionary<T1, T2> {
         return map.values();
     }
 
+    @Override
+    public MyIDictionary<T1, T2> copy() {
+        Map<T1, T2> newMap = new HashMap<>(this.map);
+        return new MyDictionary<>(newMap);
+    }
+
 }

@@ -43,8 +43,12 @@ public class AssignStmt implements IStmt {
             else throw new ValueTypeError("declared type of variable" + id + " and type of " +
                     "the assigned expression do not match");
         } else throw new VariableNotDefinedException("the used variable" + id + " was not declared before");
-        return state;
+        return null;
     }
 
+    @Override
+    public IStmt deepcopy() {
+        return new AssignStmt(this.id, this.exp.deepcopy());
+    }
 
 }

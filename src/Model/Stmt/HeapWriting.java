@@ -46,7 +46,12 @@ public class HeapWriting implements IStmt {
             throw new KeyDoesntExist("There is no such variable name");
         }
 
-        return state;
+        return null;
+    }
+
+    @Override
+    public IStmt deepcopy() {
+        return new HeapWriting(this.id, this.exp.deepcopy());
     }
 
     @Override

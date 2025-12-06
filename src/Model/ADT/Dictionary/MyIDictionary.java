@@ -20,4 +20,5 @@ public interface MyIDictionary<T1, T2> {
     Map<T1,T2> getContent();
     Set<T1> keySet();
     Collection<T2> values();
+    MyIDictionary<T1,T2> copy();
 }

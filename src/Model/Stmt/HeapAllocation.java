@@ -44,7 +44,12 @@ public class HeapAllocation implements IStmt {
             throw new KeyDoesntExist("The id " + id + " does not exist or the type is not a RefType");
         }
 
-        return state;
+        return null;
+    }
+
+    @Override
+    public IStmt deepcopy() {
+        return new HeapAllocation(this.id, this.exp.deepcopy());
     }
 
     @Override

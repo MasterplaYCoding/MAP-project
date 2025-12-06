@@ -11,44 +11,80 @@ import Model.Value.Value;
 import Repository.IRepository;
 
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
+
+import static java.util.Locale.filter;
 
 public class Controller implements IController {
     private IRepository repository;
+    private ExecutorService executor;
 
     public Controller(IRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public PrgState oneStep(PrgState state) throws MyException {
-        MyIStack<IStmt> stk=state.getExeStack();
-        if(stk.isEmpty())
-            throw new ExecutionStackEmpty();
-        IStmt crtStmt = stk.pop();
-        return crtStmt.execute(state);
-    }
+    public void allStep() throws Exception {
+        executor = Executors.newFixedThreadPool(2);
+        //remove the completed programs
+        List<PrgState> prgList = removeCompletedPrg(repository.getPrgList());
+        while(!prgList.isEmpty()){
 
-    @Override
-    public void allStep() throws MyException {
-        PrgState prg = repository.getCrtPrg();
-        // displayState();
-        repository.logPrgStateExec();
-        while (!prg.getExeStack().isEmpty()){
-            oneStep(prg);
-            // displayState();
-            repository.logPrgStateExec();
-            prg.getHeap().setContent(safeGarbageCollector(
-                    getAddrFromSymTable(prg.getSymTable().values()),
-                    prg.getHeap().getContent()));
-            repository.logPrgStateExec();
+            List<Integer> combinedSymTable = new ArrayList<>();
+            for (PrgState prgState : prgList) {
+                combinedSymTable.addAll(getAddrFromSymTable(prgState.getSymTable().values()));
+            }
+
+            prgList.get(0).getHeap().setContent(safeGarbageCollector(
+                    combinedSymTable,
+                    prgList.get(0).getHeap().getContent()));
+
+            oneStepForAllPrg(prgList);
+            //remove the completed programs
+            prgList=removeCompletedPrg(repository.getPrgList());
         }
+        executor.shutdownNow();
+        //HERE the repository still contains at least one Completed Prg
+        // and its List<PrgState> is not empty. Note that oneStepForAllPrg calls the method
+        //setPrgList of repository in order to change the repository
+
+        // update the repository state
+        repository.setPrgList(prgList);
     }
 
+    /*
     @Override
     public void displayState() throws MyException{
         PrgState prg = repository.getCrtPrg();
         System.out.println(prg.toString());
+    }*/
+
+    @Override
+    public void oneStepForAllPrg(List<PrgState> prgList) throws Exception {
+        //before the execution, print the PrgState List into the log file
+        prgList.forEach(prg ->repository.logPrgStateExec(prg));
+        //RUN concurrently one step for each of the existing PrgStates
+        //-----------------------------------------------------------------------
+        //prepare the list of callables
+        List<Callable<PrgState>> callList = prgList.stream()
+                .map((PrgState p) -> (Callable<PrgState>)(p::oneStep))
+                .collect(Collectors.toList());
+
+        List<PrgState> newPrgList = executor.invokeAll(callList).stream()
+                .map(future->{
+                    try { return future.get(); }
+                    catch (Exception e) { System.out.println(e.getMessage()); }
+                    return null;
+                })
+                .filter(Objects::nonNull)
+                .toList();
+
+        prgList.addAll(newPrgList);
+        prgList.forEach(prg->repository.logPrgStateExec(prg));
+        repository.setPrgList(prgList);
     }
 
     public IRepository getRepository() {
@@ -92,5 +128,12 @@ public class Controller implements IController {
         return heap.entrySet().stream()
                 .filter(e->reachable.contains(e.getKey()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    @Override
+    public List<PrgState> removeCompletedPrg(List<PrgState> inPrgList) {
+        return inPrgList.stream()
+                .filter(PrgState::isNotCompleted)
+                .collect(Collectors.toList());
     }
 }

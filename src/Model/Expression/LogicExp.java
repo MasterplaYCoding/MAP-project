@@ -41,6 +41,11 @@ public class LogicExp implements Exp {
         throw new ValueTypeError("first operand is not boolean");
     }
 
+    @Override
+    public Exp deepcopy() {
+        return new LogicExp(e1.deepcopy(), e2.deepcopy(), op);
+    }
+
 
     @Override
     public String toString() {

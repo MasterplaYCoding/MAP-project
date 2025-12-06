@@ -47,7 +47,12 @@ public class closeRFile implements IStmt{
             throw new FileException("Something went wrong while closing file");
         }
         fileTable.remove(val);
-        return prgState;
+        return null;
+    }
+
+    @Override
+    public IStmt deepcopy() {
+        return  new closeRFile(this.exp.deepcopy());
     }
 
     @Override

@@ -37,7 +37,12 @@ public class WhileStmt implements IStmt{
         }
         else throw new ValueTypeError("The while condition should be a boolean expression");
 
-        return state;
+        return null;
+    }
+
+    @Override
+    public IStmt deepcopy() {
+        return  new WhileStmt(exp.deepcopy(), stmt.deepcopy());
     }
 
     @Override

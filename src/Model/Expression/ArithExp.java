@@ -52,6 +52,21 @@ public class ArithExp implements Exp {
     }
 
     @Override
+    public Exp deepcopy() {
+
+        char sign;
+        switch (op) {
+            case 1 -> sign = '+';
+            case 2 -> sign = '-';
+            case 3 -> sign = '*';
+            case 4 -> sign = '/';
+            default -> sign = '?';
+        }
+
+        return new ArithExp(sign, this.e1.deepcopy(), this.e2.deepcopy());
+    }
+
+    @Override
     public String toString() {
         return switch (op) {
             case 1 -> e1.toString() + " + " + e2.toString();

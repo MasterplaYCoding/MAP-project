@@ -3,6 +3,8 @@ package Model.ADT.List;
 import Model.Exception.ADTExceptions.IndexOutOfBoundsException;
 import Model.Exception.MyException;
 
+import java.util.List;
+
 public interface MyIList<T> {
     void add(T value);
     void add(int index, T value);
@@ -13,4 +15,6 @@ public interface MyIList<T> {
     T getFirst() throws MyException;
     T getLast() throws MyException;
     String fileToString();
+    List<T> getList() throws MyException;
+    void setList(List<T> list) throws MyException;
 }

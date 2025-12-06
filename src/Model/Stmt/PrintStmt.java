@@ -28,6 +28,11 @@ public class PrintStmt implements IStmt{
         MyIDictionary<String, Value> symTable =  state.getSymTable();
         MyIHeap<Integer, Value> heap =  state.getHeap();
         out.add(exp.eval(symTable, heap));
-        return state;
+        return null;
+    }
+
+    @Override
+    public IStmt deepcopy() {
+        return new PrintStmt(this.exp.deepcopy());
     }
 }

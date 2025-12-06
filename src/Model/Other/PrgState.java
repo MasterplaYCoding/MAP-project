@@ -6,6 +6,8 @@ import Model.ADT.List.MyIList;
 import Model.ADT.List.MyList;
 import Model.ADT.Stack.MyIStack;
 import Model.ADT.Stack.MyStack;
+import Model.Exception.MyException;
+import Model.Exception.StatementsExecution.ExecutionStackEmpty;
 import Model.Heap.MyHeap;
 import Model.Heap.MyIHeap;
 import Model.Stmt.IStmt;
@@ -20,6 +22,16 @@ public class PrgState {
     private MyIList<Value> out;
     private MyIDictionary<StringValue, BufferedReader> FileTable;
     private MyIHeap<Integer, Value> heap;
+    private static int nextId = 0;
+    private int id;
+
+    private static synchronized int getNextId() {
+        return ++nextId;
+    }
+
+    public void updateId(){
+        id = getNextId();
+    }
 
     IStmt originalProgram;
 
@@ -29,6 +41,7 @@ public class PrgState {
         out = new MyList<>();
         FileTable = new MyDictionary<>();
         heap = new MyHeap<>();
+        id = getNextId();
     }
 
     public PrgState(PrgState state) {
@@ -38,25 +51,28 @@ public class PrgState {
         this.out = state.out;
         this.FileTable = state.FileTable;
         this.heap = state.heap;
+        this.id = state.id;
     }
 
     public PrgState(MyIStack<IStmt> stk, MyIDictionary<String, Value> symtbl, MyIList<Value> ot, IStmt prg, MyIDictionary<StringValue, BufferedReader> FileTable) {
         exeStack = stk;
         symTable = symtbl;
         out = ot;
-        originalProgram = prg;
+        originalProgram = prg.deepcopy();
         this.FileTable = FileTable;
-        stk.push(prg);
+        stk.push(originalProgram);
+        id = getNextId();
     }
 
     public PrgState(IStmt prg) {
         exeStack = new MyStack<IStmt>();
         symTable = new MyDictionary<String, Value>();
         out = new MyList<Value>();
-        originalProgram = prg;
-        exeStack.push(prg);
+        originalProgram = prg.deepcopy();
+        exeStack.push(originalProgram);
         FileTable = new MyDictionary<StringValue, BufferedReader>();
         heap = new MyHeap<>();
+        id = getNextId();
     }
 
     public MyIStack<IStmt> getExeStack() {
@@ -109,7 +125,7 @@ public class PrgState {
 
     @Override
     public String toString() {
-        String str = "";
+        String str = "Program id = " + id + "\n";
         str += "Exe stack : " + exeStack.toString() + "\n";
         str += "Sym table : " + symTable.toString() + "\n";
         str += "Out : " + out.toString() + "\n";
@@ -117,11 +133,22 @@ public class PrgState {
     }
 
     public String fileToString() {
-        StringBuilder str = new StringBuilder(exeStack.fileToString() + '\n' + symTable.fileToString() + out.fileToString() + "\nFileTable:\n");
+        StringBuilder str = new StringBuilder("Program id = " + id + "\n");
+        str.append(exeStack.fileToString()).append('\n').append(symTable.fileToString()).append(out.fileToString()).append("\nFileTable:\n");
         for (StringValue key : FileTable.keySet()) {
             str.append(key.getValue()).append("\n");
         }
         str.append(heap.toString()).append("\n");
         return  str.toString();
+    }
+
+    public Boolean isNotCompleted() {
+        return !exeStack.isEmpty();
+    }
+
+    public PrgState oneStep() throws MyException {
+        if(exeStack.isEmpty()) throw new ExecutionStackEmpty("prgstate stack is empty");
+        IStmt crtStmt = exeStack.pop();
+        return crtStmt.execute(this);
     }
 }

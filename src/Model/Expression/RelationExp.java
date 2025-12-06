@@ -82,4 +82,21 @@ public class RelationExp implements Exp {
         }
         throw new ValueTypeError("first operand is not an integer");
     }
+
+    @Override
+    public Exp deepcopy() {
+
+        String sign;
+        switch (relation) {
+            case 1 -> sign = "<";
+            case 2 -> sign = "<=";
+            case 3 -> sign = "==";
+            case 4 -> sign = "!=";
+            case 5 -> sign = ">";
+            case 6 -> sign = ">=";
+            default -> sign = "<";
+        }
+
+        return new RelationExp(this.ex1.deepcopy(), this.ex2.deepcopy(), sign);
+    }
 }

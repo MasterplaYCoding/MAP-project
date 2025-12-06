@@ -29,6 +29,11 @@ public class HeapReading implements Exp {
     }
 
     @Override
+    public Exp deepcopy() {
+        return new HeapReading(exp.deepcopy());
+    }
+
+    @Override
     public String toString(){
         return "rH("+exp.toString()+")";
     }

@@ -34,7 +34,12 @@ public class VarDeclStmt implements  IStmt {
         if(symTbl.isDefined(name)) throw new VariableAlreadyDeclared();
         if(typ ==  null) throw new ValueTypeError("Type is null");
         symTbl.put(name, typ.defaultValue());
-        return state;
+        return null;
+    }
+
+    @Override
+    public IStmt deepcopy() {
+        return  new VarDeclStmt(name, typ);
     }
 
 }
