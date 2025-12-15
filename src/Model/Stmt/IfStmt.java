@@ -9,6 +9,7 @@ import Model.Expression.Exp;
 import Model.Heap.MyIHeap;
 import Model.Other.PrgState;
 import Model.Type.BoolType;
+import Model.Type.Type;
 import Model.Value.BoolValue;
 import Model.Value.Value;
 
@@ -50,5 +51,16 @@ public class IfStmt implements IStmt {
     @Override
     public IStmt deepcopy() {
         return new IfStmt(exp.deepcopy(), thenS.deepcopy(), elseS.deepcopy());
+    }
+
+    @Override
+    public MyIDictionary<String, Type> typecheck(MyIDictionary<String, Type> typeEnv) throws MyException {
+        Type typexp=exp.typecheck(typeEnv);
+        if (typexp.equals(new BoolType())) {
+            thenS.typecheck(typeEnv.copy());
+            elseS.typecheck(typeEnv.copy());
+            return typeEnv;
+        }
+        else throw new ValueTypeError("The condition of IF has not the type bool");
     }
 }

@@ -8,6 +8,7 @@ import Model.Expression.Exp;
 import Model.Heap.MyIHeap;
 import Model.Other.PrgState;
 import Model.Type.RefType;
+import Model.Type.Type;
 import Model.Value.RefValue;
 import Model.Value.Value;
 
@@ -50,6 +51,16 @@ public class HeapAllocation implements IStmt {
     @Override
     public IStmt deepcopy() {
         return new HeapAllocation(this.id, this.exp.deepcopy());
+    }
+
+    @Override
+    public MyIDictionary<String, Type> typecheck(MyIDictionary<String, Type> typeEnv) throws MyException {
+        Type typevar = typeEnv.get(id);
+        Type typexp = exp.typecheck(typeEnv);
+        if (typevar.equals(new RefType(typexp)))
+            return typeEnv;
+        else
+            throw new ValueTypeError("NEW stmt: right hand side and left hand side have different types ");
     }
 
     @Override

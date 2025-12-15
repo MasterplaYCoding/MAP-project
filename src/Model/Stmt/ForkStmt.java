@@ -3,8 +3,11 @@ package Model.Stmt;
 import Model.ADT.Dictionary.MyIDictionary;
 import Model.ADT.Stack.MyIStack;
 import Model.ADT.Stack.MyStack;
+import Model.Exception.ExpressionsEvaluation.ValueTypeError;
 import Model.Exception.MyException;
 import Model.Other.PrgState;
+import Model.Type.BoolType;
+import Model.Type.Type;
 import Model.Value.Value;
 
 public class ForkStmt implements IStmt{
@@ -32,6 +35,12 @@ public class ForkStmt implements IStmt{
     @Override
     public IStmt deepcopy() {
         return new ForkStmt(this.stmt.deepcopy());
+    }
+
+    @Override
+    public MyIDictionary<String, Type> typecheck(MyIDictionary<String, Type> typeEnv) throws MyException {
+        stmt.typecheck(typeEnv.copy());
+        return typeEnv;
     }
 
     @Override

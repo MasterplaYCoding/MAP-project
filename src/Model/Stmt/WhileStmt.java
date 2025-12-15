@@ -8,6 +8,7 @@ import Model.Expression.Exp;
 import Model.Heap.MyIHeap;
 import Model.Other.PrgState;
 import Model.Type.BoolType;
+import Model.Type.Type;
 import Model.Value.BoolValue;
 import Model.Value.Value;
 
@@ -43,6 +44,16 @@ public class WhileStmt implements IStmt{
     @Override
     public IStmt deepcopy() {
         return  new WhileStmt(exp.deepcopy(), stmt.deepcopy());
+    }
+
+    @Override
+    public MyIDictionary<String, Type> typecheck(MyIDictionary<String, Type> typeEnv) throws MyException {
+        Type typexp=exp.typecheck(typeEnv);
+        if (typexp.equals(new BoolType())) {
+            stmt.typecheck(typeEnv);
+            return typeEnv;
+        }
+        else throw new ValueTypeError("The condition of WHILE has not the type bool");
     }
 
     @Override

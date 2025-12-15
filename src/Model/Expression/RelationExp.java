@@ -5,7 +5,9 @@ import Model.Exception.ExpressionsEvaluation.DivisionByZeroException;
 import Model.Exception.ExpressionsEvaluation.ValueTypeError;
 import Model.Exception.MyException;
 import Model.Heap.MyIHeap;
+import Model.Type.BoolType;
 import Model.Type.IntType;
+import Model.Type.Type;
 import Model.Value.BoolValue;
 import Model.Value.IntValue;
 import Model.Value.Value;
@@ -98,5 +100,17 @@ public class RelationExp implements Exp {
         }
 
         return new RelationExp(this.ex1.deepcopy(), this.ex2.deepcopy(), sign);
+    }
+
+    @Override
+    public Type typecheck(MyIDictionary<String, Type> typeEnv) throws MyException {
+        Type typ1, typ2;
+        typ1=ex1.typecheck(typeEnv);
+        typ2=ex2.typecheck(typeEnv);
+        if (typ1.equals(new IntType())) {
+            if (typ2.equals(new IntType())) {
+                return new BoolType();
+            } else throw new ValueTypeError("second operand is not an integer");
+        }else throw new ValueTypeError("first operand is not an integer");
     }
 }

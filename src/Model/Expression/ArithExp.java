@@ -7,6 +7,7 @@ import Model.Exception.ExpressionsEvaluation.ValueTypeError;
 import Model.Exception.MyException;
 import Model.Heap.MyIHeap;
 import Model.Type.IntType;
+import Model.Type.Type;
 import Model.Value.IntValue;
 import Model.Value.Value;
 
@@ -64,6 +65,18 @@ public class ArithExp implements Exp {
         }
 
         return new ArithExp(sign, this.e1.deepcopy(), this.e2.deepcopy());
+    }
+
+    @Override
+    public Type typecheck(MyIDictionary<String, Type> typeEnv) throws MyException {
+        Type typ1, typ2;
+        typ1=e1.typecheck(typeEnv);
+        typ2=e2.typecheck(typeEnv);
+        if (typ1.equals(new IntType())) {
+            if (typ2.equals(new IntType())) {
+                return new IntType();
+            } else throw new ValueTypeError("second operand is not an integer");
+        }else throw new ValueTypeError("first operand is not an integer");
     }
 
     @Override

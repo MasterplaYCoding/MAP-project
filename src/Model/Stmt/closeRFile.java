@@ -9,6 +9,7 @@ import Model.Expression.Exp;
 import Model.Heap.MyIHeap;
 import Model.Other.PrgState;
 import Model.Type.StringType;
+import Model.Type.Type;
 import Model.Value.StringValue;
 import Model.Value.Value;
 
@@ -53,6 +54,14 @@ public class closeRFile implements IStmt{
     @Override
     public IStmt deepcopy() {
         return  new closeRFile(this.exp.deepcopy());
+    }
+
+    @Override
+    public MyIDictionary<String, Type> typecheck(MyIDictionary<String, Type> typeEnv) throws MyException {
+        Type tip = exp.typecheck(typeEnv);
+        if (tip.equals(new StringType()))
+            return typeEnv;
+        else throw new ValueTypeError("closeRFile : Expression is not of type String");
     }
 
     @Override

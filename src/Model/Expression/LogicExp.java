@@ -8,6 +8,7 @@ import Model.Exception.ExpressionsEvaluation.ValueTypeError;
 import Model.Exception.MyException;
 import Model.Heap.MyIHeap;
 import Model.Type.BoolType;
+import Model.Type.Type;
 import Model.Value.BoolValue;
 import Model.Value.Value;
 
@@ -44,6 +45,18 @@ public class LogicExp implements Exp {
     @Override
     public Exp deepcopy() {
         return new LogicExp(e1.deepcopy(), e2.deepcopy(), op);
+    }
+
+    @Override
+    public Type typecheck(MyIDictionary<String, Type> typeEnv) throws MyException {
+        Type typ1, typ2;
+        typ1=e1.typecheck(typeEnv);
+        typ2=e2.typecheck(typeEnv);
+        if (typ1.equals(new BoolType())) {
+            if (typ2.equals(new BoolType())) {
+                return new BoolType();
+            } else throw new MyException("second operand is not a boolean");
+        }else throw new MyException("first operand is not a boolean");
     }
 
 

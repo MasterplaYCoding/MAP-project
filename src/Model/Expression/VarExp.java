@@ -4,6 +4,7 @@ import Model.ADT.Dictionary.MyIDictionary;
 import Model.Exception.ADTExceptions.NullKeyException;
 import Model.Exception.MyException;
 import Model.Heap.MyIHeap;
+import Model.Type.Type;
 import Model.Value.Value;
 
 public class VarExp implements Exp {
@@ -21,6 +22,11 @@ public class VarExp implements Exp {
     @Override
     public Exp deepcopy() {
         return new VarExp(id);
+    }
+
+    @Override
+    public Type typecheck(MyIDictionary<String, Type> typeEnv) throws MyException {
+        return typeEnv.get(id);
     }
 
     @Override

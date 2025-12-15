@@ -10,6 +10,7 @@ import Model.Heap.MyIHeap;
 import Model.Other.PrgState;
 import Model.Type.IntType;
 import Model.Type.StringType;
+import Model.Type.Type;
 import Model.Value.IntValue;
 import Model.Value.StringValue;
 import Model.Value.Value;
@@ -69,6 +70,17 @@ public class readFile implements IStmt{
     @Override
     public IStmt deepcopy() {
         return new readFile(this.exp.deepcopy(),  this.var_name);
+    }
+
+    @Override
+    public MyIDictionary<String, Type> typecheck(MyIDictionary<String, Type> typeEnv) throws MyException {
+        if(typeEnv.get(var_name).equals(new IntType())) {
+            Type tip = exp.typecheck(typeEnv);
+            if (tip.equals(new StringType()))
+                return typeEnv;
+            else throw new ValueTypeError("readFile : Type of expression is not string");
+        }
+        else throw new ValueTypeError("readFile : Type of variable is not string");
     }
 
     @Override

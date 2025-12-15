@@ -5,6 +5,7 @@ import Model.Exception.ExpressionsEvaluation.ValueTypeError;
 import Model.Exception.MyException;
 import Model.Heap.MyIHeap;
 import Model.Type.RefType;
+import Model.Type.Type;
 import Model.Value.RefValue;
 import Model.Value.Value;
 
@@ -31,6 +32,16 @@ public class HeapReading implements Exp {
     @Override
     public Exp deepcopy() {
         return new HeapReading(exp.deepcopy());
+    }
+
+    @Override
+    public Type typecheck(MyIDictionary<String, Type> typeEnv) throws MyException {
+        Type typ=exp.typecheck(typeEnv);
+        if (typ instanceof RefType) {
+            RefType reft =(RefType) typ;
+            return reft.getInner();
+        } else
+            throw new ValueTypeError("the rH argument is not a Ref Type");
     }
 
     @Override

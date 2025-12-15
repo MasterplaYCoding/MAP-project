@@ -11,6 +11,7 @@ import Model.Exception.StatementsExecution.ExecutionStackEmpty;
 import Model.Heap.MyHeap;
 import Model.Heap.MyIHeap;
 import Model.Stmt.IStmt;
+import Model.Type.Type;
 import Model.Value.StringValue;
 import Model.Value.Value;
 
@@ -68,6 +69,8 @@ public class PrgState {
         exeStack = new MyStack<IStmt>();
         symTable = new MyDictionary<String, Value>();
         out = new MyList<Value>();
+        MyIDictionary<String, Type> typeEnv = new MyDictionary<>();
+        prg.typecheck(typeEnv);
         originalProgram = prg.deepcopy();
         exeStack.push(originalProgram);
         FileTable = new MyDictionary<StringValue, BufferedReader>();

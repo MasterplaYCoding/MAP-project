@@ -1,8 +1,10 @@
 package Model.Stmt;
 
+import Model.ADT.Dictionary.MyIDictionary;
 import Model.ADT.Stack.MyIStack;
 import Model.Exception.MyException;
 import Model.Other.PrgState;
+import Model.Type.Type;
 
 public class CompStmt implements IStmt {
     private final IStmt first;
@@ -29,6 +31,14 @@ public class CompStmt implements IStmt {
     @Override
     public IStmt deepcopy() {
         return new CompStmt(this.first.deepcopy(), this.second.deepcopy());
+    }
+
+    @Override
+    public MyIDictionary<String, Type> typecheck(MyIDictionary<String, Type> typeEnv) throws MyException {
+        //MyIDictionary<String,Type> typEnv1 = first.typecheck(typeEnv);
+        //MyIDictionary<String,Type> typEnv2 = second.typecheck(typEnv1);
+        //return typEnv2;
+        return second.typecheck(first.typecheck(typeEnv));
     }
 
     public IStmt getFirst() {

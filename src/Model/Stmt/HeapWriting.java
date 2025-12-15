@@ -8,6 +8,7 @@ import Model.Expression.Exp;
 import Model.Heap.MyIHeap;
 import Model.Other.PrgState;
 import Model.Type.RefType;
+import Model.Type.Type;
 import Model.Value.RefValue;
 import Model.Value.Value;
 
@@ -52,6 +53,15 @@ public class HeapWriting implements IStmt {
     @Override
     public IStmt deepcopy() {
         return new HeapWriting(this.id, this.exp.deepcopy());
+    }
+
+    @Override
+    public MyIDictionary<String, Type> typecheck(MyIDictionary<String, Type> typeEnv) throws MyException {
+        Type tip =  exp.typecheck(typeEnv);
+        Type tip2 = typeEnv.get(id);
+        if (tip2.equals(new RefType(tip)))
+            return typeEnv;
+        throw new ValueTypeError("HeapWriting : The memory location is not of same type as exp");
     }
 
     @Override
