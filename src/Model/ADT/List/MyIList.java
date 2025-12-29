@@ -15,6 +15,7 @@ public interface MyIList<T> {
     T getFirst() throws MyException;
     T getLast() throws MyException;
     String fileToString();
+    String fileToString2();
     List<T> getList() throws MyException;
     void setList(List<T> list) throws MyException;
 }

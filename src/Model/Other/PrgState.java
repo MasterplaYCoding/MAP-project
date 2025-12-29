@@ -30,6 +30,10 @@ public class PrgState {
         return ++nextId;
     }
 
+    public int getIdOfState() {
+        return id;
+    }
+
     public void updateId(){
         id = getNextId();
     }

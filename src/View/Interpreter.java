@@ -16,12 +16,29 @@ import Repository.MyRepository;
 import View.Command.ExitCommand;
 import View.Command.RunExample;
 import Service.Controller;
+import View.GUI.FirstWindow;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
-class Interpreter {
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Interpreter {
+
+    public static List<Controller> controllers = new ArrayList<>();
+    public static List<String> programs_strings = new ArrayList<>();
+
 
     public static void main(String[] args) {
 
+        System.setErr(new PrintStream(new OutputStream() {
+            public void write(int b) {}
+        }));
+
         try {
+
             IStmt ex1 = new CompStmt(new VarDeclStmt("v", new IntType()),
                     new CompStmt(new AssignStmt("v", new ValueExp(new IntValue(2))), new PrintStmt(new
                             VarExp("v"))));
@@ -106,6 +123,22 @@ class Interpreter {
             IRepository repo8 = new MyRepository(prg8, "log8.txt");
             Controller ctr8 = new Controller(repo8);
 
+            controllers.add(ctr1);
+            controllers.add(ctr2);
+            controllers.add(ctr3);
+            controllers.add(ctr4);
+            controllers.add(ctr5);
+            controllers.add(ctr6);
+            controllers.add(ctr7);
+            controllers.add(ctr8);
+            programs_strings.add(ex1.toString());
+            programs_strings.add(ex2.toString());
+            programs_strings.add(ex3.toString());
+            programs_strings.add(ex4.toString());
+            programs_strings.add(ex5.toString());
+            programs_strings.add(ex6.toString());
+            programs_strings.add(ex7.toString());
+            programs_strings.add(ex8.toString());
 
             TextMenu menu = new TextMenu();
             menu.addCommand(new ExitCommand("0", "exit"));
@@ -118,7 +151,9 @@ class Interpreter {
             menu.addCommand(new RunExample("7", ex7.toString(), ctr7));
             menu.addCommand(new RunExample("8", ex8.toString(), ctr8));
 
-            menu.show();
+            //menu.show();
+
+            Application.launch(FirstWindow.class, args);
         }
         catch (Exception e) {
             System.out.println(e.getMessage());

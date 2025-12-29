@@ -87,6 +87,34 @@ public class Controller implements IController {
         repository.setPrgList(prgList);
     }
 
+    public void oneStepForAllPrgNoInput() throws Exception {
+        if (executor == null || executor.isShutdown()) {
+            executor = Executors.newFixedThreadPool(2);
+        }
+        List<PrgState> prgList = removeCompletedPrg(repository.getPrgList());
+        //before the execution, print the PrgState List into the log file
+        prgList.forEach(prg ->repository.logPrgStateExec(prg));
+        //RUN concurrently one step for each of the existing PrgStates
+        //-----------------------------------------------------------------------
+        //prepare the list of callables
+        List<Callable<PrgState>> callList = prgList.stream()
+                .map((PrgState p) -> (Callable<PrgState>)(p::oneStep))
+                .collect(Collectors.toList());
+
+        List<PrgState> newPrgList = executor.invokeAll(callList).stream()
+                .map(future->{
+                    try { return future.get(); }
+                    catch (Exception e) { System.out.println(e.getMessage()); }
+                    return null;
+                })
+                .filter(Objects::nonNull)
+                .toList();
+
+        prgList.addAll(newPrgList);
+        prgList.forEach(prg->repository.logPrgStateExec(prg));
+        repository.setPrgList(prgList);
+    }
+
     public IRepository getRepository() {
         return repository;
     }
@@ -135,5 +163,9 @@ public class Controller implements IController {
         return inPrgList.stream()
                 .filter(PrgState::isNotCompleted)
                 .collect(Collectors.toList());
+    }
+
+    public List<PrgState> getPrgList(){
+        return repository.getPrgList();
     }
 }

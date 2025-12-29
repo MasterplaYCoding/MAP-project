@@ -85,6 +85,15 @@ public class MyList<T> implements MyIList<T> {
     }
 
     @Override
+    public String fileToString2() {
+        StringBuilder sb = new StringBuilder();
+        for (T t : vector) {
+            sb.append(t.toString()).append('\n');
+        }
+        return sb.toString();
+    }
+
+    @Override
     public List<T> getList() throws MyException {
         return  vector;
     }

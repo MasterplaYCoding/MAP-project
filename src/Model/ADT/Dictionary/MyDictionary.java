@@ -77,6 +77,15 @@ public class MyDictionary<T1, T2> implements MyIDictionary<T1, T2> {
     }
 
     @Override
+    public String fileToString2() {
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<T1, T2> entry : map.entrySet()){
+            sb.append(entry.getKey()).append(" --> ").append(entry.getValue().toString()).append("\n");
+        }
+        return sb.toString();
+    }
+
+    @Override
     public Map<T1, T2> getContent() {
         return map;
     }

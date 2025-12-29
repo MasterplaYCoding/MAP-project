@@ -17,6 +17,7 @@ public interface MyIDictionary<T1, T2> {
     boolean isDefined(T1 id) throws MyException;
     void update(T1 id, T2 val) throws MyException;
     String fileToString();
+    String fileToString2();
     Map<T1,T2> getContent();
     Set<T1> keySet();
     Collection<T2> values();

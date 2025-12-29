@@ -73,4 +73,25 @@ public class MyStack<T> implements MyIStack<T> {
         }
         return result.toString();
     }
+
+    @Override
+    public String fileToString2() {
+        Stack<IStmt> newStack = (Stack<IStmt>) stack.clone();
+        MyStack<IStmt> copie = new MyStack<>(newStack);
+
+        StringBuilder result = new StringBuilder();
+        while (!copie.isEmpty()) {
+            IStmt st = copie.pop();
+            if(st instanceof CompStmt) {
+                IStmt first = ((CompStmt) st).getFirst();
+                IStmt second = ((CompStmt) st).getSecond();
+                copie.push(second);
+                copie.push(first);
+            }
+            else {
+                result.append(st.toString()).append("\n");
+            }
+        }
+        return result.toString();
+    }
 }

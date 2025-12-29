@@ -9,4 +9,5 @@ public interface MyIStack<T> {
     boolean isEmpty();
     int size();
     String fileToString();
+    String fileToString2();
 }
