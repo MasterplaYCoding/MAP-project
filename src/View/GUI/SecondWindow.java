@@ -39,7 +39,6 @@ public class SecondWindow extends Application {
     public void start(Stage stage) {
         GridPane grid = new GridPane();
 
-        // Row 0: Number of PrgStates + Run button
         nrPrgStatesField = new TextField();
 
         runOneStepButton = new Button("Run One Step");
@@ -59,7 +58,6 @@ public class SecondWindow extends Application {
         grid.add(nrPrgStatesField, 1, 0);
         grid.add(runOneStepButton, 2, 0);
 
-        // Row 1-2: Heap and Out
         heapTable = new TableView();
         outList = new ListView();
         grid.add(new Label("Heap:"), 0, 1);
@@ -67,7 +65,6 @@ public class SecondWindow extends Application {
         grid.add(new Label("Out:"), 1, 1);
         grid.add(outList, 1, 2);
 
-        // Row 3-4: FileTable and PrgState IDs
         fileTableList = new ListView();
         prgStateIdList = new ListView();
 
@@ -83,7 +80,6 @@ public class SecondWindow extends Application {
         grid.add(new Label("PrgState IDs:"), 1, 3);
         grid.add(prgStateIdList, 1, 4);
 
-        // Row 5-6: SymTable and ExeStack
         symTable = new TableView();
         exeStackList = new ListView();
         grid.add(new Label("SymTable:"), 0, 5);
