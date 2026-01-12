@@ -75,6 +75,7 @@ public class SecondWindow extends Application {
             }
         });
 
+
         grid.add(new Label("FileTable:"), 0, 3);
         grid.add(fileTableList, 0, 4);
         grid.add(new Label("PrgState IDs:"), 1, 3);
